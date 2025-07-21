@@ -15,17 +15,60 @@
 */
 int main(void)
 {
-    int num1;
-    int num2;
+    // 소수 입력을 위해 변수를 float로 설정하고, 길이를 제한
+    float num1; 
+    float num2;
     char operator;
-    printf("Input first Num:\n");
-    scanf("%d", &num1);
-    printf("Input secound Num:\n");
-    scanf("%d", &num2);
+    
+    int checkNum = 0;   // 잘못된 연산자가 들어오는 것을 체크, 잘못된 연산자는 1, 나눗셈 시 0이 있으면 2로 표기
 
-    printf("Input operator:\n");
-    scanf("%c", &operator);
+    float result;
 
+    printf("Input First Num:\n");
+    scanf("%f", &num1);
+
+    printf("Input Secound Num:\n");
+    scanf("%f", &num2);
+
+    printf("Input Operator:\n");
+    scanf("%s", &operator);
+
+    switch (operator)
+    {
+    case '+':
+        result = num1 + num2;
+        break;
+    case '-':
+        result = num1 - num2;
+        break;
+    case '*':
+        result = num1 * num2;
+        break;
+    case '/':
+        if (num1 == 0 || num2 ==0)
+            checkNum = 2;  
+        else
+            result = num1 / num2;
+        break;
+    case '%':
+        if (num1 == 0 || num2 ==0)
+            checkNum = 2;
+        else
+            result = (int)num1 % (int)num2; // 나머지 계산은 정수로 바꿔야 가능하기에 int로 형변환
+        break;
+    default:
+        if (operator != '+' || operator != '-' || operator != '*' || operator != '/' || operator != '%')
+            checkNum = 1;
+        break;
+    }
+   
+    // 나눗셈에 0이 들어갔으면, 결과 출력을 하지 않음
+    if (checkNum == 1)
+        printf("비정상 연산자가 입력되었습니다.\n");
+    else if (checkNum == 2)
+        printf("0으로 나눌 수 없습니다.\n");
+    else
+        printf("Result is: %f\n", result);
 
     return 0;
 }

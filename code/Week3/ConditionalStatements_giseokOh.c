@@ -4,7 +4,6 @@
 // Use an if-else statement to check if it is positive or negative.
 // Use switch statement to check if it is even or odd.
 // You should print out the result to the console.
-
 int main(void)
 {
     int champion = 0;
