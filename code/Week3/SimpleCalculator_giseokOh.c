@@ -30,8 +30,9 @@ int main(void)
     printf("Input Secound Num:\n");
     scanf("%f", &num2);
 
+    // 한글자 입력에 %s대신 %c사용
     printf("Input Operator:\n");
-    scanf("%s", &operator);
+    scanf("%c", &operator);
 
     switch (operator)
     {
@@ -45,6 +46,7 @@ int main(void)
         result = num1 * num2;
         break;
     case '/':
+    // 조건 검사할 필요 X -> 10/0 은 불가능하지만 0/10 가능하기에
         if (num1 == 0 || num2 ==0)
             checkNum = 2;  
         else
@@ -57,6 +59,7 @@ int main(void)
             result = (int)num1 % (int)num2; // 나머지 계산은 정수로 바꿔야 가능하기에 int로 형변환
         break;
     default:
+    // 해당 조건은 항상 참, 다른 조건 생각해보기
         if (operator != '+' || operator != '-' || operator != '*' || operator != '/' || operator != '%')
             checkNum = 1;
         break;
