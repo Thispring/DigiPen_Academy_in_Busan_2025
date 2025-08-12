@@ -16,6 +16,7 @@ int main(void)
 
     int resArray[2][2] = {0};
 
+    // xArray 배열 값 입력
     for (int i = 0; i < 2; i++)
     {
         for (int j = 0; j < 3; j++)
@@ -25,6 +26,7 @@ int main(void)
         }
     }
 
+    // yArray 배열 값 입력
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 2; j++)
@@ -34,6 +36,7 @@ int main(void)
         }
     }
 
+    // 두 배열의 곱을 resArray에 규칙에 맞게 대입
     for (int j = 0; j < 3; j++)
     {
         resArray[0][0] += (xArray[0][j] * yArray[j][0]);
