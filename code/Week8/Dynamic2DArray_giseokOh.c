@@ -19,19 +19,27 @@ void printMatrix(int **matrix, int rows, int cols);
 
 int main(void)
 {
-    // rows와 cols의 순서에 따른 메모리 생성 순서 분석하기
-    int rows = 3;
-    int cols = 4;
-    int **matrix = (int **)malloc(cols * sizeof(int*));
+    // rows와 cols의 순서에 따른 메모리 생성 순서 생각하기
+    // rows(행): 가로 방향으로 줄을 세운 것
+    // cols(열): 세로 방향으로 줄을 세운 것
+    // [3][4] 2차원 배열 만들기
+    int rows = 4;
+    int cols = 3;
 
-    for (int i = 0; i < rows; i++)
+    // 가로의 길이를 먼저 정해줘야, 세로로 얼마나 쌓아야 하는지 알 수 있음
+    int **matrix = (int **)malloc(rows * sizeof(int*));
+
+    // 열의 개수 만큼 반복하여, rows로 만든 동적 공간을 세로로 쌓는다.
+    for (int i = 0; i < cols; i++)
     {
-        matrix[i] = (int *)malloc(rows * sizeof(int));
+        matrix[i] = (int *)malloc(cols * sizeof(int));
     }
 
+    // 2차원 배열에 값을 넣고 출력하는 함수 실행
     fillMatrix(matrix, rows, cols);
     printMatrix(matrix, rows, cols);
 
+    // free 시에도 세로줄 부터 free
     for (int i = 0; i < cols; i++)
     {
         free(matrix[i]);
@@ -43,10 +51,11 @@ int main(void)
 
 void fillMatrix(int **matrix, int rows, int cols)
 {
+    // 안쪽 for문에 rows를, 바깥쪽 for문에 cols를 사용해야함
     int count = 1;
-    for (int i = 0; i < rows; i++)
+    for (int i = 0; i < cols; i++)
     {
-        for (int j = 0; j < cols; j++)
+        for (int j = 0; j < rows; j++)
         {
             matrix[i][j] = count;
             count++;
@@ -56,52 +65,13 @@ void fillMatrix(int **matrix, int rows, int cols)
 
 void printMatrix(int **matrix, int rows, int cols)
 {
-    for (int i = 0; i < rows; i++)
+    // 안쪽 for문에 rows를, 바깥쪽 for문에 cols를 사용해야함
+    for (int i = 0; i < cols; i++)
     {
-        for (int j = 0; j < cols; j++)
+        for (int j = 0; j < rows; j++)
         {
             printf("%d", matrix[i][j]);
         }
         printf("\n");
     }
 }
-
-/*
-#include <stdio.h>
-#include <stdlib.h>
-
-void fillMatrix(int *matrix, int rows, int cols);
-void printMatrix(int *matrix, int rows, int cols);
-
-int main(void)
-{
-    int rows = 3;
-    int cols = 3;
-    int *matrix = (int *)malloc(rows * cols * sizeof(int*));
-
-    fillMatrix(matrix, rows, cols);
-    printMatrix(matrix, rows, cols);
-
-    free(matrix);
-
-    return 0;
-}
-
-void fillMatrix(int *matrix, int rows, int cols)
-{
-    int count = 1;
-    for (int i = 0; i < rows * cols; i++)
-    {
-        matrix[i] = count;
-        count++;
-    }
-}
-
-void printMatrix(int *matrix, int rows, int cols)
-{
-    for (int i = 0; i < rows * cols; i++)
-    {
-        printf("%5d", matrix[i]);
-    }
-}
-*/
