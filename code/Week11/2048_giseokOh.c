@@ -202,25 +202,16 @@ void add_random_tile(void)
 
     // ((rand() % 2) + 1)으로 1또는 2를 무작위로 뽑은 뒤, 값에 *2를 하여, 2 또는 4 생성
     spawnNum = ((rand() % 2) + 1) * 2;
-    // TEST:
-    // printf("spawnNum: %d\n", spawnNum);
 
     do
     {
         // 위치값을 랜덤으로 생성
         XPos = rand() % SIZE;
         YPos = rand() % SIZE;
-        // TEST:
-        /*
-        printf("XPos: %d\n", XPos);
-        printf("YPos: %d\n", YPos);
-        */
 
         // 만약 해당 위치에 0이 아닌 값이 있다면, 중복 위치 이므로, 재반복
         if (board[XPos][YPos] != 0)
         {
-            // TEST:
-            // printf("Duplicate Pos\n");
             continue;
         }
         else
@@ -245,20 +236,8 @@ void init_board(void)
 int count = 0;
 void rotate_board_clockwise(void)
 {
-    int rotateBorad[SIZE][SIZE] = {0};
-    // TEST:
-    /*
-    printf("\nBefore rotateBorad\n");
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            printf("%d", rotateBorad[i][j]);
-        }
-        printf("\n");
-    }
-    */
     // TODO: rotate the board clockwise
+    int rotateBoard[SIZE][SIZE] = {0}; 
 
     // 시계 방향 변화 관계식
     // (A, B) -> (B, 3 - A)
@@ -268,7 +247,7 @@ void rotate_board_clockwise(void)
         {
             if (board[i][j] != 0)
             {
-                rotateBorad[j][3 - i] = board[i][j];
+                rotateBoard[j][3 - i] = board[i][j];
                 board[i][j] = 0;
             }
         }
@@ -278,7 +257,7 @@ void rotate_board_clockwise(void)
     {
         for (int j = 0; j < SIZE; j++)
         {
-            board[i][j] = rotateBorad[i][j];
+            board[i][j] = rotateBoard[i][j];
         }
     }
 }
@@ -312,17 +291,6 @@ int move_left(void)
         nonZeroCount = 0; // 행이 바뀔 때 마다 0으로 초기화
     }
 
-    // TEST:
-    /*
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            printf("%d", tempBoard[i][j]);
-        }
-        printf("\n");
-    }
-    */
     // TODO: Traverse the temporary array:
     //   - If two consecutive tiles have the same value and are non-zero:
     //       * Merge them into one tile (double the value of the first).
@@ -334,77 +302,25 @@ int move_left(void)
     // ex) [2][2][2][2] -> [4][4][0][0]
     // 점수 규칙: score 변수에 합쳐서 만든 숫자의 값 만큼 +
     // ex) [2][2][0][0] -> [4][0][0][0] 일때 4점 추가
-    printf("\nBefore\n");
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            printf("%d", tempBoard[i][j]);
-        }
-        printf("\n");
-    }
     int next = 1; // 다음 타일과 비교를 위해, 위치값을 조절하는 변수
 
     for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
         {
-            // TEST:
-            // printf("j+next:%d\n", j + next);
             // 숏 서킷 룰 활용, j가 3일 때 검사 생략
             if (j < 3 && tempBoard[i][j] != 0 && tempBoard[i][j] == tempBoard[i][j + next])
             {
                 // tempBoard[i][j] 자리에 tempBoard 끼리 더한 값을 대입
                 tempBoard[i][j] = tempBoard[i][j] * 2;
-                printf("tempBorad[%d][%d]:%d\n", i, j, tempBoard[i][j]);
                 // 점수 추가
                 score += tempBoard[i][j];
                 // 다음 타일을 0으로 만들어 중복 연산 방지
                 tempBoard[i][j + next] = 0;
             }
-
-            /*
-            if (j < 3 && tempBoard[i][j] != 0 && tempBoard[i][j] == tempBoard[i][j + next])
-            {
-                if (j+next > 3)
-                    printf("j+next: %d\n", j+next);
-                // tempBoard[i][j] 자리에 tempBoard 끼리 더한 값을 대입
-                tempBoard[i][j] = tempBoard[i][j] * 2;
-                // 점수 추가
-                score += tempBoard[i][j];
-                // 다음 타일을 0으로 만들어 중복 연산 방지
-                tempBoard[i][j + next] = 0;
-
-                // TEST:
-                // printf("score: %d\n", score);
-                //printf("tempBoard[i][j + next]: %d\n", tempBoard[i][j+next]);
-            }
-            */
         }
     }
-    // TEST:
-    /*
 
-    printf("\nAfter\n");
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            printf("%d", tempBoard[i][j]);
-        }
-        printf("\n");
-    }
-
-    printf("\ntempBoard:\n");
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            printf("%d", tempBoard[i][j]);
-        }
-        printf("\n");
-    }
-    */
     // TODO: After merging, compress the row again:
     //   - Move all non-zero values to the left side,
     //     filling remaining cells with zeros.
@@ -421,34 +337,13 @@ int move_left(void)
             // 0이 아닐때만 값을 복사
             if (tempBoard[i][j] != 0)
             {
-                printf("nonZeroCount: %d\n", nonZeroCount);
                 compBoard[i][nonZeroCount] = tempBoard[i][j];
                 nonZeroCount++; // 0이 아닌 값이 들어왔으므로 +1하여, 다음 순서로 이동
             }
         }
         nonZeroCount = 0; // 행이 바뀔 때 마다 0으로 초기화
     }
-    printf("\nAfter Merging\n");
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            printf("%d", compBoard[i][j]);
-        }
-        printf("\n");
-    }
-    // TEST:
-    /*
-    printf("\nAfter merging tempBoard:\n");
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            printf("%d", tempBoard[i][j]);
-        }
-        printf("\n");
-    }
-    */
+
     // TODO: Copy the temporary array back into the actual board row.
     //   - If any value differs from the original board, set 'moved' to 1.
 
@@ -483,8 +378,6 @@ int move_left(void)
     }
 
     // TODO: Return 'moved' to indicate whether at least one change occurred.
-    // TEST:
-    // printf("moved is: %d\n", moved);
     return moved;
 
     // Examples (input row → output row):
